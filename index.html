@@ -151,6 +151,21 @@
             color: var(--primary-color);
         }
 
+        /* Download Section Styles */
+        .feature-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-item i {
+            font-size: 1.2rem;
+        }
+
+        .shadow-lg {
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+        }
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .hero {
@@ -190,6 +205,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#tentang">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#download">Download</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#kontak">Kontak</a>
@@ -271,6 +289,69 @@
         </div>
     </section>
 
+    <!-- Download Source Code Section -->
+    <section id="download" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <div class="mb-4">
+                                <i class="fab fa-github" style="font-size: 4rem; color: var(--primary-color);"></i>
+                            </div>
+                            <h2 class="mb-3">Download Source Code</h2>
+                            <p class="lead mb-4">Ingin menggunakan atau mengembangkan sistem ini? Source code tersedia di GitHub dengan lisensi open source.</p>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="feature-item mb-3">
+                                        <i class="fas fa-code text-primary me-2"></i>
+                                        <span>PHP Native</span>
+                                    </div>
+                                    <div class="feature-item mb-3">
+                                        <i class="fas fa-database text-primary me-2"></i>
+                                        <span>MySQL Database</span>
+                                    </div>
+                                    <div class="feature-item mb-3">
+                                        <i class="fas fa-chart-bar text-primary me-2"></i>
+                                        <span>Metode AHP</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-item mb-3">
+                                        <i class="fas fa-mobile-alt text-primary me-2"></i>
+                                        <span>Responsive Design</span>
+                                    </div>
+                                    <div class="feature-item mb-3">
+                                        <i class="fas fa-shield-alt text-primary me-2"></i>
+                                        <span>Secure Authentication</span>
+                                    </div>
+                                    <div class="feature-item mb-3">
+                                        <i class="fas fa-file-excel text-primary me-2"></i>
+                                        <span>Export Excel</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                                <a href="https://github.com/Lapadde?tab=repositories" target="_blank" class="btn btn-dark btn-lg">
+                                    <i class="fab fa-github me-2"></i>Lihat di GitHub
+                                </a>
+                                <a href="https://github.com/Lapadde/my-spk" target="_blank" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-download me-2"></i>Download Source Code
+                                </a>
+                            </div>
+                            <div class="mt-4">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Source code ini dikembangkan oleh <strong>Taufiq Hidayat</strong> dan tersedia di GitHub
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -284,6 +365,7 @@
                     <ul class="footer-links">
                         <li><a href="#fitur">Fitur</a></li>
                         <li><a href="#tentang">Tentang</a></li>
+                        <li><a href="#download">Download</a></li>
                         <li><a href="#kontak">Kontak</a></li>
                         <li><a href="login.html">Login</a></li>
                     </ul>
@@ -296,6 +378,7 @@
                         <li><i class="fas fa-map-marker-alt me-2"></i>Konoha, Indonesia</li>
                     </ul>
                     <div class="social-links mt-3">
+                        <a href="https://github.com/Lapadde" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>

@@ -127,6 +127,19 @@ $top_dosen = $conn->query($query);
             margin-bottom: 1rem;
         }
         
+        /* Profile Avatar Styles */
+        .profile-avatar {
+            position: relative;
+        }
+        
+        .profile-icon-fallback {
+            transition: all 0.3s ease;
+        }
+        
+        .profile-icon-fallback:hover {
+            transform: scale(1.1);
+        }
+        
         /* Mobile Navigation Styles */
         .mobile-nav {
             display: none;
@@ -339,9 +352,14 @@ $top_dosen = $conn->query($query);
             <div class="col-md-9 col-lg-10 p-4 main-content">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>Dashboard</h2>
-                    <div class="user-info">
+                    <div class="user-info d-flex align-items-center">
                         <span class="me-2">Selamat datang, <?php echo htmlspecialchars($_SESSION['full_name']); ?></span>
-                        <img src="https://via.placeholder.com/40" class="rounded-circle" alt="Profile">
+                        <div class="profile-avatar">
+                            <img src="../assets/img/profile.png" class="rounded-circle" alt="Profile" style="width: 40px; height: 40px; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="profile-icon-fallback" style="display: none; width: 40px; height: 40px; background: var(--primary-color); border-radius: 50%; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
