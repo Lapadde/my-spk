@@ -1,4 +1,4 @@
-# Dokumentasi Sistem SPK Dosen dengan Metode AHP
+# Sistem SPK Dosen dengan Metode AHP
 
 ## 📋 Deskripsi Sistem
 
