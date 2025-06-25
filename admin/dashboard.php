@@ -302,6 +302,11 @@ $top_dosen = $conn->query($query);
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="ahp_calculation.php">
+                                <i class="fas fa-calculator me-2"></i>Perhitungan AHP
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="users.php">
                                 <i class="fas fa-users me-2"></i>Users
                             </a>
@@ -341,55 +346,80 @@ $top_dosen = $conn->query($query);
                 </div>
 
                 <!-- Statistics Cards -->
-                <div class="row g-4 mb-4">
-                    <div class="col-md-3">
-                        <div class="card stat-card bg-primary text-white">
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-tie stat-icon text-primary"></i>
+                                <h4 class="mt-2"><?php echo $stats['total_dosen']; ?></h4>
+                                <p class="text-muted mb-0">Total Dosen</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users stat-icon text-success"></i>
+                                <h4 class="mt-2"><?php echo $stats['total_penilai']; ?></h4>
+                                <p class="text-muted mb-0">Total Penilai</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-list stat-icon text-warning"></i>
+                                <h4 class="mt-2"><?php echo $stats['total_kriteria']; ?></h4>
+                                <p class="text-muted mb-0">Total Kriteria</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-star stat-icon text-info"></i>
+                                <h4 class="mt-2"><?php echo $stats['total_penilaian']; ?></h4>
+                                <p class="text-muted mb-0">Total Penilaian</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Setup Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Setup Sistem</h5>
+                            </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">Total Dosen</h6>
-                                        <h2 class="mb-0"><?php echo $stats['total_dosen']; ?></h2>
-                                    </div>
-                                    <i class="fas fa-user-tie stat-icon"></i>
+                                <div class="d-grid gap-2">
+                                    <a href="setup_default_criteria.php" class="btn btn-info">
+                                        <i class="fas fa-download me-2"></i>Setup Kriteria Default AHP
+                                    </a>
+                                    <a href="setup_sample_data.php" class="btn btn-success">
+                                        <i class="fas fa-database me-2"></i>Setup Data Contoh
+                                    </a>
+                                    <a href="../fix_database_structure.php" class="btn btn-warning">
+                                        <i class="fas fa-tools me-2"></i>Perbaiki Struktur Database
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card stat-card bg-success text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">Total Penilai</h6>
-                                        <h2 class="mb-0"><?php echo $stats['total_penilai']; ?></h2>
-                                    </div>
-                                    <i class="fas fa-users stat-icon"></i>
-                                </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>Perhitungan AHP</h5>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stat-card bg-info text-white">
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">Kriteria</h6>
-                                        <h2 class="mb-0"><?php echo $stats['total_kriteria']; ?></h2>
-                                    </div>
-                                    <i class="fas fa-list stat-icon"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stat-card bg-warning text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">Total Penilaian</h6>
-                                        <h2 class="mb-0"><?php echo $stats['total_penilaian']; ?></h2>
-                                    </div>
-                                    <i class="fas fa-star stat-icon"></i>
+                                <p class="text-muted mb-3">
+                                    Jalankan perhitungan AHP untuk menentukan ranking dosen terbaik berdasarkan bobot kriteria.
+                                </p>
+                                <div class="d-grid">
+                                    <a href="ahp_calculation.php" class="btn btn-primary">
+                                        <i class="fas fa-play me-2"></i>Jalankan Perhitungan AHP
+                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -166,10 +166,15 @@ $result = $conn->query($query);
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Manajemen Kriteria</h2>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addKriteriaModal">
-                        <i class="fas fa-plus me-2"></i>Tambah Kriteria
-                    </button>
+                    <h2><i class="fas fa-list me-2"></i>Manajemen Kriteria</h2>
+                    <div>
+                        <a href="setup_default_criteria.php" class="btn btn-info me-2">
+                            <i class="fas fa-download me-2"></i>Setup Kriteria Default
+                        </a>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addKriteriaModal">
+                            <i class="fas fa-plus me-2"></i>Tambah Kriteria
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Alert Messages -->

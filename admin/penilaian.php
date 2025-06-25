@@ -369,7 +369,11 @@ $kriteria_result = $conn->query($kriteria_query);
                     <form method="GET" class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label">Tahun Akademik</label>
-                            <input type="number" class="form-control" name="tahun_akademik" value="<?php echo $tahun_akademik; ?>" min="2000" max="2100">
+                            <select class="form-select" name="tahun_akademik">
+                                <option value="2023/2024" <?php echo $tahun_akademik == '2023/2024' ? 'selected' : ''; ?>>2023/2024</option>
+                                <option value="2024/2025" <?php echo $tahun_akademik == '2024/2025' ? 'selected' : ''; ?>>2024/2025</option>
+                                <option value="2025/2026" <?php echo $tahun_akademik == '2025/2026' ? 'selected' : ''; ?>>2025/2026</option>
+                            </select>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Semester</label>
@@ -408,6 +412,25 @@ $kriteria_result = $conn->query($kriteria_query);
                     </form>
                 </div>
 
+                <!-- Alert Messages -->
+                <?php if (isset($_SESSION['success'])): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <?php echo $_SESSION['success']; ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <?php echo $_SESSION['error']; ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+
                 <!-- Dosen List -->
                 <div class="row">
                     <?php if ($result->num_rows > 0): ?>
@@ -418,9 +441,9 @@ $kriteria_result = $conn->query($kriteria_query);
                                         <h5 class="card-title"><?php echo $row['nama']; ?></h5>
                                         <p class="card-text">
                                             <small class="text-muted">
-                                                <i class="fas fa-id-card me-2"></i><?php echo $row['nidn']; ?><br>
+                                                <i class="fas fa-id-card me-2"></i><?php echo isset($row['nidn']) ? $row['nidn'] : (isset($row['nip']) ? $row['nip'] : ''); ?><br>
                                                 <i class="fas fa-university me-2"></i><?php echo $row['fakultas']; ?><br>
-                                                <i class="fas fa-graduation-cap me-2"></i><?php echo $row['prodi']; ?>
+                                                <i class="fas fa-graduation-cap me-2"></i><?php echo isset($row['prodi']) ? $row['prodi'] : (isset($row['program_studi']) ? $row['program_studi'] : ''); ?>
                                             </small>
                                         </p>
                                         <div class="progress mb-3">

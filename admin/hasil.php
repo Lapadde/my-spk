@@ -31,8 +31,11 @@ foreach ($required_tables as $table) {
 
 if ($tables_exist) {
     // Query untuk mendapatkan hasil penilaian
-    $query = "SELECT d.*, 
-              (SELECT AVG(nilai) FROM penilaian WHERE dosen_id = d.id AND tahun_akademik = ? AND semester = ?) as nilai_rata_rata,
+    $query = "SELECT d.*, d.nama as nama_dosen, d.prodi as program_studi,
+              (SELECT SUM(p.nilai * k.bobot / (SELECT SUM(bobot) FROM kriteria)) 
+               FROM penilaian p 
+               JOIN kriteria k ON p.kriteria_id = k.id 
+               WHERE p.dosen_id = d.id AND p.tahun_akademik = ? AND p.semester = ?) as total_score,
               (SELECT COUNT(*) FROM penilaian WHERE dosen_id = d.id AND tahun_akademik = ? AND semester = ?) as jumlah_penilaian,
               (SELECT COUNT(*) FROM kriteria) as total_kriteria
               FROM dosen d
@@ -46,7 +49,7 @@ if ($tables_exist) {
         $query .= " AND d.prodi = ?";
     }
 
-    $query .= " ORDER BY nilai_rata_rata DESC";
+    $query .= " ORDER BY total_score DESC";
 
     // Prepare statement
     $stmt = $conn->prepare($query);
@@ -282,6 +285,11 @@ if ($tables_exist) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="ahp_calculation.php">
+                                <i class="fas fa-calculator me-2"></i>Perhitungan AHP
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="users.php">
                                 <i class="fas fa-users me-2"></i>Users
                             </a>
@@ -313,12 +321,24 @@ if ($tables_exist) {
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Hasil Penilaian</h2>
-                    <?php if ($tables_exist): ?>
-                    <button type="button" class="btn btn-primary btn-print" onclick="window.print()">
-                        <i class="fas fa-print me-2"></i>Cetak Hasil
-                    </button>
-                    <?php endif; ?>
+                    <h2><i class="fas fa-chart-bar me-2"></i>Hasil Penilaian Dosen</h2>
+                    <div>
+                        <a href="ahp_calculation.php" class="btn btn-info me-2">
+                            <i class="fas fa-calculator me-2"></i>Perhitungan AHP
+                        </a>
+                        <button class="btn btn-primary" onclick="exportToExcel()">
+                            <i class="fas fa-download me-2"></i>Export Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Info AHP -->
+                <div class="alert alert-info mb-4">
+                    <h6><i class="fas fa-info-circle me-2"></i>Metode AHP (Analytic Hierarchy Process)</h6>
+                    <p class="mb-0">
+                        Hasil penilaian ini menggunakan metode AHP yang mempertimbangkan bobot kriteria berdasarkan perbandingan berpasangan. 
+                        Untuk melihat detail perhitungan bobot dan uji konsistensi, silakan klik tombol "Perhitungan AHP" di atas.
+                    </p>
                 </div>
 
                 <?php if (!$tables_exist): ?>
@@ -344,16 +364,17 @@ if ($tables_exist) {
                 <!-- Filter Section -->
                 <div class="filter-section">
                     <form method="GET" class="row">
-                        <div class="col-md-5 mb-3">
-                            <label for="tahun" class="form-label">Tahun Akademik</label>
-                            <select class="form-select" id="tahun" name="tahun">
+                        <div class="col-md-3">
+                            <label class="form-label">Tahun Akademik</label>
+                            <select class="form-select" name="tahun">
                                 <option value="2023/2024" <?php echo $tahun_akademik == '2023/2024' ? 'selected' : ''; ?>>2023/2024</option>
-                                <option value="2022/2023" <?php echo $tahun_akademik == '2022/2023' ? 'selected' : ''; ?>>2022/2023</option>
+                                <option value="2024/2025" <?php echo $tahun_akademik == '2024/2025' ? 'selected' : ''; ?>>2024/2025</option>
+                                <option value="2025/2026" <?php echo $tahun_akademik == '2025/2026' ? 'selected' : ''; ?>>2025/2026</option>
                             </select>
                         </div>
-                        <div class="col-md-5 mb-3">
-                            <label for="semester" class="form-label">Semester</label>
-                            <select class="form-select" id="semester" name="semester">
+                        <div class="col-md-3">
+                            <label class="form-label">Semester</label>
+                            <select class="form-select" name="semester">
                                 <option value="Ganjil" <?php echo $semester == 'Ganjil' ? 'selected' : ''; ?>>Ganjil</option>
                                 <option value="Genap" <?php echo $semester == 'Genap' ? 'selected' : ''; ?>>Genap</option>
                             </select>
@@ -381,29 +402,35 @@ if ($tables_exist) {
                                         <th>Jabatan</th>
                                         <th>Fakultas</th>
                                         <th>Program Studi</th>
-                                        <th>Total Nilai</th>
+                                        <th>Total Score</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php while ($row = $result->fetch_assoc()): ?>
+                                    <?php 
+                                    $ranking = 1;
+                                    while ($row = $result->fetch_assoc()): 
+                                    ?>
                                     <tr>
                                         <td>
                                             <span class="ranking-badge <?php 
-                                                echo $row['ranking'] == 1 ? 'ranking-1' : 
-                                                    ($row['ranking'] == 2 ? 'ranking-2' : 
-                                                    ($row['ranking'] == 3 ? 'ranking-3' : 'ranking-other')); 
+                                                echo $ranking == 1 ? 'ranking-1' : 
+                                                    ($ranking == 2 ? 'ranking-2' : 
+                                                    ($ranking == 3 ? 'ranking-3' : 'ranking-other')); 
                                             ?>">
-                                                <?php echo $row['ranking']; ?>
+                                                <?php echo $ranking; ?>
                                             </span>
                                         </td>
                                         <td><?php echo htmlspecialchars($row['nip']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['nama_dosen']); ?></td>
+                                        <td><?php echo htmlspecialchars(isset($row['nama_dosen']) ? $row['nama_dosen'] : $row['nama']); ?></td>
                                         <td><?php echo htmlspecialchars($row['jabatan']); ?></td>
                                         <td><?php echo htmlspecialchars($row['fakultas']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['program_studi']); ?></td>
-                                        <td><?php echo number_format($row['total_nilai'], 4); ?></td>
+                                        <td><?php echo htmlspecialchars(isset($row['program_studi']) ? $row['program_studi'] : (isset($row['prodi']) ? $row['prodi'] : '')); ?></td>
+                                        <td><?php echo number_format(isset($row['total_score']) ? $row['total_score'] : 0, 4); ?></td>
                                     </tr>
-                                    <?php endwhile; ?>
+                                    <?php 
+                                    $ranking++;
+                                    endwhile; 
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
@@ -510,19 +537,68 @@ if ($tables_exist) {
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    
     <script>
         $(document).ready(function() {
-            $('#hasilTable, #detailTable').DataTable({
-                "paging": true,
-                "ordering": true,
-                "info": true,
-                "searching": true,
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json"
-                }
+            $('#hasilTable').DataTable({
+                "pageLength": 25,
+                "order": [[ 6, "desc" ]]
             });
         });
+        
+        function exportToExcel() {
+            // Ambil data dari tabel
+            const table = document.getElementById('hasilTable');
+            const rows = table.querySelectorAll('tbody tr');
+            
+            const data = [];
+            
+            // Header
+            data.push(['Ranking', 'NIP', 'Nama Dosen', 'Jabatan', 'Fakultas', 'Program Studi', 'Total Score']);
+            
+            // Data rows
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = [];
+                
+                cells.forEach((cell, index) => {
+                    if (index === 0) {
+                        // Ranking
+                        const badge = cell.querySelector('.ranking-badge');
+                        rowData.push(badge ? badge.textContent.trim() : cell.textContent.trim());
+                    } else {
+                        rowData.push(cell.textContent.trim());
+                    }
+                });
+                
+                if (rowData.length > 0) {
+                    data.push(rowData);
+                }
+            });
+            
+            // Buat workbook
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // Set column widths
+            ws['!cols'] = [
+                { width: 10 }, // Ranking
+                { width: 20 }, // NIP
+                { width: 30 }, // Nama Dosen
+                { width: 20 }, // Jabatan
+                { width: 25 }, // Fakultas
+                { width: 25 }, // Program Studi
+                { width: 15 }  // Total Score
+            ];
+            
+            XLSX.utils.book_append_sheet(wb, ws, 'Hasil Penilaian Dosen');
+            
+            // Export file
+            const fileName = `Hasil_Penilaian_Dosen_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
     </script>
 </body>
 </html> 
