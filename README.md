@@ -185,7 +185,7 @@ Pastikan database `my-spk` sudah dibuat dan tabel-tabel berikut sudah ada:
 Jika ada pertanyaan atau masalah, silakan:
 
 - Hubungi administrator sistem
-- Hubungi via Telegram: [@backupku](https://t.me/backupku)
+- Hubungi via Telegram: [@Tpk](https://t.me/backupku)
 - Follow Instagram: [@taaufiik25](https://instagram.com/taaufiik25)
 
 ---
